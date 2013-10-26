@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="fr" class="no-js">
+<head>
+<meta charset="UTF-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"> 
+<meta name="viewport" content="width=device-width, initial-scale=1.0"> 
+<title>GW2 Ankala</title>
+<meta name="description" content="Real time world boss and champions notifier" />
+<meta name="keywords" content="gw2, guild wars 2, ankala, events, world boss, champion" />
+<meta name="author" content="Astohan" />
+
+<link rel="shortcut icon" href="images/events.png" type="image/png"/>
+<link rel="stylesheet" type="text/css" href="css/main.css" />
+<link rel="stylesheet" type="text/css" href="css/component.css" />
+<link rel="stylesheet" type="text/css" href="css/bootstrap.min.css" />
+
+<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/angularjs/1.1.4/angular.min.js"></script>
+<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/angularjs/1.1.4/angular-resource.min.js"></script>
+<script type="text/javascript" src="js/events.js"></script>
+<script type="text/javascript" src="js/moment.min.js"></script>
+<script type="text/javascript" src="js/jquery.min.js"></script>
+<script src="js/modernizr.custom.js"></script>
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-26258450-2', 'ankala.fr');
+  ga('send', 'pageview');
+
+</script>
+
+</head>
+
+<body ng-app="gw2App" ng-controller="gw2Ctrl">
+<div class="container">
+<ul id="gn-menu" class="gn-menu-main">
+<li class="gn-trigger">
+<a class="gn-icon gn-icon-menu"><span>Menu</span></a>
+<nav class="gn-menu-wrapper">
+<div class="gn-scroller">
+
+<ul class="gn-menu">
+<li><a class="gn-icon gn-icon-download" href="https://github.com/Ankala/GW2-events" target="_blank">Sources</a></li>
+<li><a class="gn-icon gn-icon-archive" href="http://ankala.fr" target="_blank">Ankala.fr</a></li>
+<li><a class="gn-icon gn-icon-help" href="mailto:admin@ankala.fr">Contact</a></li>
+</ul>
+
+</div><!-- /gn-scroller -->
+</nav>
+</li>
+
+<li><a href="#">GW2 Ankala</a></li>
+<select class="nav" id="world_select" ng-model="worldId" ng-options="world.id as world.name for world in worlds | orderBy:'name'"></select>
+<select class="nav" id="interval_select" ng-model="interval">
+<option value="0">Aucune</option>
+<option value="15000">15s</option>
+<option value="30000">30s</option>
+<option value="60000">1min</option>
+<option value="300000">5min</option>
+</select>
+
+<button class="btn btn-sm btn-default" ng-click="refresh()">Actualiser</button>
+<button class="btn btn-sm btn-warning" ng-click="toggleChampionNotifications()" ng-disabled="!desktopNotificationsCapable()" title="Activer/Désactiver les notifications des Champions">{{ isChampionNotificationsEnabled() && 'Désactiver' || 'Champions' }}</button>
+<button class="btn btn-sm btn-danger" ng-click="toggleEventNotifications()" ng-disabled="!desktopNotificationsCapable()" title="Activer/Désactiver les notifications des World Boss">{{ isEventNotificationsEnabled() && 'Désactiver' || 'World Boss' }}</button>
+		
+<li><a href="http://gw2.ankala.fr/mini-donjons.html"><span>Mini-Donjons</span></a></li>
+</ul>
+
+<header>
+<section id="watched_events" class="view">
+
+<div class="droite">
+<h1>World Boss</h1>
+<ul>
+<li ng-repeat="e in watchedEvents | orderBy:['state', 'level', 'name']" class="event state_{{e.state | lowercase}}">
+        [{{e.level}}] {{e.name}}
+</li>
+</ul>
+</div>
+
+<h1>Champions</h1>
+<ul>
+<li ng-repeat="e in watchedChampions | orderBy:['state', 'level', 'name']" class="event state_{{e.state | lowercase}}">
+        [{{e.level}}] {{e.name}}
+</li>
+</ul>
+
+</section>
+</header> 
+</div><!-- /container -->
+
+<script src="js/classie.js"></script>
+<script src="js/gnmenu.js"></script>
+<script>
+new gnMenu( document.getElementById( 'gn-menu' ) );
+</script>
+
+</body>
+</html>
